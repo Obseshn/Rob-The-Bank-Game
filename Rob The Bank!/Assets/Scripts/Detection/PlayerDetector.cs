@@ -2,12 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class PlayerDetector : MonoBehaviour
 {
+    [SerializeField] private float detectingRadius;
+
     private float counter = 0;
     private float maxDetectionProgress = 5f;
 
     private bool isPlayerInTrigger;
+
+    private void Start()
+    {
+        SphereCollider collider = GetComponent<SphereCollider>();
+        collider.radius = detectingRadius;
+        collider.isTrigger = true;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,5 +42,10 @@ public class PlayerDetector : MonoBehaviour
     {
         counter = 0;
         isPlayerInTrigger = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 0, 2), detectingRadius);
     }
 }

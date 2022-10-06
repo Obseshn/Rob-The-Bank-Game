@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PathFollower : MonoBehaviour
 {
+
+    [SerializeField] private Animator animator;
     public enum MovementType
     {
         Moveing,
         Lerping
     }
+
+    [SerializeField] private int[] skipWaitingPointsNumber;
 
     public MovementType type = MovementType.Moveing;
     public MovementPath MyPath;
@@ -80,8 +84,10 @@ public class PathFollower : MonoBehaviour
 
     IEnumerator PauseBetweenPointsMoving()
     {
+        animator.SetBool("isWalking", false);
         isOnPointWaiting = true;
         yield return new WaitForSeconds(pauseBetweenPointsTime);
         isOnPointWaiting = false;
+        animator.SetBool("isWalking", true);
     }
 }
