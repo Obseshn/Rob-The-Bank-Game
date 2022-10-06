@@ -12,10 +12,14 @@ public class PathFollower : MonoBehaviour
 
     public MovementType type = MovementType.Moveing;
     public MovementPath MyPath;
-    public float speed = 1f;
+    public float moveSpeed = 1f;
+    private float rotationSpeed = 1f;
     public float maxDistance = .1f;
 
     private IEnumerator<Transform> pointInPath;
+
+    private bool isOnPointWaiting = false;
+    private float pauseBetweenPointsTime = 10f;
 
     private void Start()
     {
@@ -40,25 +44,44 @@ public class PathFollower : MonoBehaviour
 
     private void Update()
     {
-        if (pointInPath == null || pointInPath.Current == null)
+        if (!isOnPointWaiting)
         {
-            Debug.Log(transform.name + ": " + "pointInPath: " + pointInPath + "currentPointInPath: " + pointInPath.Current);
-            return;
-        }
+            if (pointInPath == null || pointInPath.Current == null)
+            {
+                Debug.Log(transform.name + ": " + "pointInPath: " + pointInPath + "currentPointInPath: " + pointInPath.Current);
+                return;
+            }
 
-        if (type == MovementType.Moveing)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime * speed);
-        }
-        else if (type == MovementType.Lerping)
-        {
-            transform.position = Vector3.Lerp(transform.position, pointInPath.Current.position, Time.deltaTime * speed);
-        }
+            if (type == MovementType.Moveing)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, pointInPath.Current.position, Time.deltaTime * moveSpeed);
 
-        var distanceSquare = (transform.position - pointInPath.Current.position).sqrMagnitude;
-        if (distanceSquare < maxDistance * maxDistance)
-        {
-            pointInPath.MoveNext();
+            }
+            else if (type == MovementType.Lerping)
+            {
+                transform.position = Vector3.Lerp(transform.position, pointInPath.Current.position, Time.deltaTime * moveSpeed);
+            }
+
+            var distanceSquare = (transform.position - pointInPath.Current.position).sqrMagnitude;
+            if (distanceSquare < maxDistance * maxDistance)
+            {
+                StartCoroutine(PauseBetweenPointsMoving());
+                Debug.Log("Got to point");
+                pointInPath.MoveNext();
+            }
         }
+        else
+        {
+            Vector3 directon = pointInPath.Current.position - transform.position;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(directon), rotationSpeed * Time.deltaTime);
+        }
+        
+    }
+
+    IEnumerator PauseBetweenPointsMoving()
+    {
+        isOnPointWaiting = true;
+        yield return new WaitForSeconds(pauseBetweenPointsTime);
+        isOnPointWaiting = false;
     }
 }
