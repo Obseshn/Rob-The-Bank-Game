@@ -5,35 +5,39 @@ using UnityEngine;
 public class PathFollower : MonoBehaviour
 {
 
+
     [SerializeField] private Animator animator;
+    [SerializeField] private MovementPath myPath;
     public enum MovementType
     {
         Moveing,
         Lerping
     }
 
-    [SerializeField] private int[] skipWaitingPointsNumber;
-
-    public MovementType type = MovementType.Moveing;
-    public MovementPath MyPath;
-    public float moveSpeed = 1f;
-    private float rotationSpeed = 1f;
-    public float maxDistance = .1f;
+    [SerializeField] private MovementType type = MovementType.Moveing;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float rotationSpeed = 1f;
+    private float maxDistance = .1f;
 
     private IEnumerator<Transform> pointInPath;
+
+    public Transform GetCurrentPoint()
+    {
+        return pointInPath.Current;
+    }
 
     private bool isOnPointWaiting = false;
     private float pauseBetweenPointsTime = 10f;
 
     private void Start()
     {
-        if (MyPath == null)
+        if (myPath == null)
         {
             Debug.Log(transform.name + ":  не установлен путь(MyPath)");
             return;
         }
 
-        pointInPath = MyPath.GetNextPathPoint();
+        pointInPath = myPath.GetNextPathPoint();
 
         pointInPath.MoveNext();
 
@@ -69,7 +73,17 @@ public class PathFollower : MonoBehaviour
             var distanceSquare = (transform.position - pointInPath.Current.position).sqrMagnitude;
             if (distanceSquare < maxDistance * maxDistance)
             {
-                StartCoroutine(PauseBetweenPointsMoving());
+                if (pointInPath.Current.GetComponent<PathPoint>().isPause)
+                {
+                    rotationSpeed = 1f;
+                    StartCoroutine(PauseBetweenPointsMoving(pauseBetweenPointsTime));
+                }
+                else
+                {
+                    rotationSpeed = 2f;
+                    StartCoroutine(PauseBetweenPointsMoving(pauseBetweenPointsTime / 3f));
+                }
+                
                 Debug.Log("Got to point");
                 pointInPath.MoveNext();
             }
@@ -82,11 +96,11 @@ public class PathFollower : MonoBehaviour
         
     }
 
-    IEnumerator PauseBetweenPointsMoving()
+    IEnumerator PauseBetweenPointsMoving(float pauseTime)
     {
         animator.SetBool("isWalking", false);
         isOnPointWaiting = true;
-        yield return new WaitForSeconds(pauseBetweenPointsTime);
+        yield return new WaitForSeconds(pauseTime);
         isOnPointWaiting = false;
         animator.SetBool("isWalking", true);
     }

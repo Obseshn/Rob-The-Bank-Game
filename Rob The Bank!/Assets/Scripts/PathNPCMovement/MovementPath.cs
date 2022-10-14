@@ -10,6 +10,7 @@ public class MovementPath : MonoBehaviour
         loop
     }
 
+    [SerializeField] public int[] skipPausePointsNumbers;
     public PathTypes PathType;
     public int movementDirection = 1;
     public int moveingTo = 0; // к какой точке джвигаться
@@ -34,7 +35,6 @@ public class MovementPath : MonoBehaviour
             Gizmos.DrawLine(PathElements[0].position, PathElements[PathElements.Length - 1].position);
         }
     }
-
     public IEnumerator<Transform> GetNextPathPoint()
     {
         if (PathElements == null || PathElements.Length < 1)

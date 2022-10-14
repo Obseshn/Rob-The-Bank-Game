@@ -1,0 +1,45 @@
+{
+    "name": "PlayerAdditionalControl",
+    "maps": [
+        {
+            "name": "PlayerInteraction",
+            "id": "f82c0bd0-b331-417c-832e-d41ae6dfd2da",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "617596e3-66e1-4fb1-a5b1-f3c9b2cc7b6f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "24574532-4e00-4b23-9cf1-8f85b3c71283",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "589e8da7-9bc7-4b38-824f-b16a232b2ee5",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
