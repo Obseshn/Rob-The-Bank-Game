@@ -27,7 +27,7 @@ public class PathFollower : MonoBehaviour
     }
 
     private bool isOnPointWaiting = false;
-    private float pauseBetweenPointsTime = 10f;
+    private float pauseBetweenPointsTime = 4f;
 
     private void Start()
     {

@@ -16,9 +16,11 @@ public class MovementPath : MonoBehaviour
     public int moveingTo = 0; // к какой точке джвигаться
     public Transform[] PathElements;
 
+
+
     public void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.blue;
 
         if (PathElements == null || PathElements.Length < 2)
         {

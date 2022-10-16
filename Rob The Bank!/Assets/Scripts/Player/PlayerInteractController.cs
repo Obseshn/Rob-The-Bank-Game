@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerInteractController : MonoBehaviour
 {
-    private float interactCD = 5f;
+    private float interactCD = 1f;
     [SerializeField] private float interactRadius;
     [SerializeField] private Vector3 offset;
     [SerializeField] private LayerMask NPCLayer;

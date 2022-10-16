@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(InteractionChecker), typeof(Rigidbody))]
 public class Door : MonoBehaviour
 {
     enum DoorType
