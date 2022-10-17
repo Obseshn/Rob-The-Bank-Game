@@ -2,50 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider))]
 public class PlayerDetector : MonoBehaviour
 {
-    [SerializeField] private float detectingRadius;
-
     private float counter = 0;
-    private float maxDetectionProgress = 5f;
+    private int maxDetectionProgress = 5;
+    private bool isPlayerDetected;
 
-    private bool isPlayerInTrigger;
-
-    private void Start()
+    public void PlayerDetectedState(bool newState)
     {
-        SphereCollider collider = GetComponent<SphereCollider>();
-        collider.radius = detectingRadius;
-        collider.isTrigger = true;
+        isPlayerDetected = newState;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player"))
+        if (isPlayerDetected)
         {
-            isPlayerInTrigger = true;
-        }
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if (isPlayerInTrigger)
-        {
-            counter += Time.deltaTime;
-            if (counter >= maxDetectionProgress)
+            if (counter == maxDetectionProgress)
             {
-                Debug.Log("Player has been detected!");
+                Debug.Log(transform.name + " fully detect a player!");
             }
+            counter += Time.deltaTime;
+        }
+        else if(counter > 0)
+        {
+            counter -= Time.deltaTime * 2;
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        counter = 0;
-        isPlayerInTrigger = false;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 0, 2), detectingRadius);
-    }
+    /*    IEnumerator PlayerDetectionProgress(int maxTimeInSec)
+        {
+            float checkRate = 0.5f;
+            counter += checkRate;
+            for (int i = 0; i < maxTimeInSec / checkRate; i++)
+            {
+                yield return new WaitForSeconds(checkRate);
+                counter += checkRate;
+                Physics.Raycast();
+            }
+        }*/
 }
