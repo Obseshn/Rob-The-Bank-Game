@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerDetector : MonoBehaviour
 {
-    private float counter = 0;
-    private int maxDetectionProgress = 5;
+    [SerializeField]private float counter = 0;
+    private int maxDetectionProgress = 4;
     private bool isPlayerDetected;
 
     public void PlayerDetectedState(bool newState)
@@ -17,9 +17,10 @@ public class PlayerDetector : MonoBehaviour
     {
         if (isPlayerDetected)
         {
-            if (counter == maxDetectionProgress)
+            if (counter >= maxDetectionProgress)
             {
                 Debug.Log(transform.name + " fully detect a player!");
+                return;
             }
             counter += Time.deltaTime;
         }

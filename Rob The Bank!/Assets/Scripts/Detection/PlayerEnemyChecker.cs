@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerEnemyChecker : MonoBehaviour
 {
     [SerializeField] private float radius = 1f;
+    [SerializeField] private Vector3 offset;
     private SphereCollider sCollider;
 
     private void Start()
@@ -13,32 +14,53 @@ public class PlayerEnemyChecker : MonoBehaviour
         sCollider = GetComponent<SphereCollider>();
         sCollider.radius = radius;
         sCollider.isTrigger = true;
+        sCollider.center += offset;
+        InvokeRepeating("CheckEnemyInDetectRadius", 5, 5);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void CheckEnemyInDetectRadius()
     {
-        if (other.GetComponent<PlayerDetector>())
+        Collider[] enemies = Physics.OverlapSphere(transform.position + offset, radius);
+        foreach (var enemy in enemies)
         {
-            RaycastHit raycastHit;
-            Vector3 direction = other.transform.position - transform.position;
-            Physics.Raycast(transform.position, direction, out raycastHit);
-
-            Debug.Log(raycastHit.transform.name);
-            if (raycastHit.transform.GetComponent<PlayerDetector>() == other.GetComponent<PlayerDetector>())
+            if (enemy.GetComponentInChildren<EnemyPointer>())
             {
-                other.GetComponent<PlayerDetector>().PlayerDetectedState(true);
-                Debug.Log(other.name + " went in enemy checker radius");
+                DrawRayToEnemy(enemy.transform);
             }
         }
     }
 
+    private void DrawRayToEnemy(Transform enemy)
+    {
+        RaycastHit raycastHit;
+        Vector3 direction = enemy.position - transform.position;
+
+        if (Physics.Raycast(transform.position + offset, direction, out raycastHit))
+        {
+            Debug.Log(raycastHit.transform.name);
+
+            if (raycastHit.point.magnitude < direction.magnitude)
+            {
+                return;
+            }
+
+            if (raycastHit.transform.GetComponentInChildren<EnemyPointer>())
+            {
+                enemy.GetComponentInChildren<EnemyPointer>().isNearToPlayer = true;
+                Debug.Log(enemy.name + " went in enemy checker radius");
+            }
+        }
+        Debug.DrawRay(transform.position, direction, Color.green, 3f);
+    }
 
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<PlayerDetector>())
+        if (other.GetComponentInChildren<EnemyPointer>())
         {
-            other.GetComponent<PlayerDetector>().PlayerDetectedState(false);
+            other.GetComponentInChildren<EnemyPointer>().isNearToPlayer = false;
+            /*PointerManager.Instance.RemoveFromList(other.GetComponent<EnemyPointer>());*/
+            Debug.Log(other.name + " went out of enemy checker radius");
         }
     }
 
@@ -47,6 +69,6 @@ public class PlayerEnemyChecker : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position + offset, radius);
     }
 }
