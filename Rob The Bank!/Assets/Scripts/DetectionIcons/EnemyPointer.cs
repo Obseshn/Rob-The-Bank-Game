@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class EnemyPointer : MonoBehaviour {
 
-    [SerializeField] EnemyHealth _enemyHealth;
+    [SerializeField] private NPCMajor controllerNPC;
     public bool isNearToPlayer;
 
     private void Start() {
-        _enemyHealth.OnDie.AddListener(Destroy);
+        controllerNPC.NPCDeath += Destroy;
         PointerManager.Instance.AddToList(this);
     }
 
 
     private void Destroy() {
         PointerManager.Instance.RemoveFromList(this);
+        
     }
 
 }

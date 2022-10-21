@@ -56,7 +56,6 @@ public class PathFollower : MonoBehaviour
         {
             if (pointInPath == null || pointInPath.Current == null)
             {
-                Debug.Log(transform.name + ": " + "pointInPath: " + pointInPath + "currentPointInPath: " + pointInPath.Current);
                 return;
             }
 

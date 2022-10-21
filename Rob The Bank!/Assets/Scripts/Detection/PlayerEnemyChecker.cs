@@ -35,12 +35,14 @@ public class PlayerEnemyChecker : MonoBehaviour
         RaycastHit raycastHit;
         Vector3 direction = enemy.position - transform.position;
 
+        Debug.DrawRay(transform.position, direction, Color.green, 3f);
         if (Physics.Raycast(transform.position + offset, direction, out raycastHit))
         {
             Debug.Log(raycastHit.transform.name);
 
             if (raycastHit.point.magnitude < direction.magnitude)
             {
+                Debug.Log("Raycast point less then direction vector");
                 return;
             }
 
@@ -50,7 +52,6 @@ public class PlayerEnemyChecker : MonoBehaviour
                 Debug.Log(enemy.name + " went in enemy checker radius");
             }
         }
-        Debug.DrawRay(transform.position, direction, Color.green, 3f);
     }
 
 

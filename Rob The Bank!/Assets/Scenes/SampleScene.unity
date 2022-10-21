@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc18ee5fb8ccc84ba1952e8619dc7c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHealth: {fileID: 95445762}
+  controllerNPC: {fileID: 95445765}
   isNearToPlayer: 0
 --- !u!54 &95445764
 Rigidbody:
@@ -521,6 +521,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &95445765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95445757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c63170b18008e479d1641c87f7596c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectsToDrop: []
+  disguiseItem: {fileID: 1550026871934628, guid: 1f1181424ea20d64ea8a1054356fb358, type: 3}
+--- !u!114 &95445766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95445757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa06c14e1ce67b24bbd84dfbd55753a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &95465371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,7 +1211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc18ee5fb8ccc84ba1952e8619dc7c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHealth: {fileID: 1614917431}
+  controllerNPC: {fileID: 1614917427}
   isNearToPlayer: 0
 --- !u!1 &282300702
 GameObject:
@@ -42606,7 +42632,7 @@ MonoBehaviour:
   objectsToDrop:
   - {fileID: 4482378963638377990, guid: fb5270c6d5f75fd4cb9076aba87c040b, type: 3}
   - {fileID: 5332308298602308235, guid: 9046fa265082d71478d5817271a7e203, type: 3}
-  interatorWithPlayer: {fileID: 1614917428}
+  disguiseItem: {fileID: 1550026871934628, guid: 1f1181424ea20d64ea8a1054356fb358, type: 3}
 --- !u!114 &1614917428
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,29 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(PathFollower), typeof(InteractionChecker))]
+[RequireComponent(typeof(PathFollower), typeof(InteractionChecker), typeof(Animator))]
 public class NPCMajor : NPCBase
 {
+    public Action NPCDeath;
     [SerializeField] private DroppedItem[] objectsToDrop;
-    [SerializeField] private InteractionChecker interatorWithPlayer;
+    [SerializeField] private GameObject disguiseItem;
+
+    private InteractionChecker interatorWithPlayer;
+    private Animator animator;
     protected PathFollower pathFollower;
+    private bool isDeath = false;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         pathFollower = GetComponent<PathFollower>();
+        interatorWithPlayer = GetComponent<InteractionChecker>();
         interatorWithPlayer.InterectWIthPlayerAction += OnInteractWitPlayer;
     }
 
     private void OnInteractWitPlayer(Transform player)
     {
-        Death();
+        if (!isDeath)
+        {
+            Death();
+        }
+        else
+        {
+            DisguiseBody();
+        }
     }
 
     protected override void Death()
     {
+        NPCDeath?.Invoke();
+        animator.SetTrigger("Death");
         DropItems();
-        base.Death();
+        pathFollower.enabled = false;
+        isDeath = true;
+/*        base.Death();*/
+    }
+
+    private void DisguiseBody()
+    {
+        Instantiate(disguiseItem, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     private void DropItems()
@@ -31,7 +54,7 @@ public class NPCMajor : NPCBase
         Vector3 spawnOffset = new Vector3(0.5f, 0, 0);
         for (int i = 0; i < objectsToDrop.Length; i++)
         {
-            Instantiate(objectsToDrop[i], transform.position + spawnOffset * i, Quaternion.Euler(0, Random.Range(0, 180), 0));
+            Instantiate(objectsToDrop[i], transform.position + spawnOffset * i, Quaternion.Euler(0, UnityEngine.Random.Range(0, 180), 0));
             Debug.Log(objectsToDrop[i].name + " dropped");
         }
     }
