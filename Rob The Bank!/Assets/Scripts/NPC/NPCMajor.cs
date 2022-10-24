@@ -59,7 +59,7 @@ public class NPCMajor : NPCBase
         }
     }
 
-    protected override void Surrender()
+    public override void Surrender()
     {
         pathFollower.enabled = false;
         base.Surrender();

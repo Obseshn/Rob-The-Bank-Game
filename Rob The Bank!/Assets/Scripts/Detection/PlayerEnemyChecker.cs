@@ -8,6 +8,12 @@ public class PlayerEnemyChecker : MonoBehaviour
     [SerializeField] private float radius = 1f;
     [SerializeField] private Vector3 offset;
     private SphereCollider sCollider;
+    private bool isOnAttackMode = false;
+
+    public void ChangeAttackMode(bool newState)
+    {
+        isOnAttackMode = newState;
+    }
 
     private void Start()
     {
@@ -49,6 +55,10 @@ public class PlayerEnemyChecker : MonoBehaviour
             if (raycastHit.transform.GetComponentInChildren<EnemyPointer>())
             {
                 enemy.GetComponentInChildren<EnemyPointer>().isNearToPlayer = true;
+                if (isOnAttackMode)
+                {
+
+                }
                 Debug.Log(enemy.name + " went in enemy checker radius");
             }
         }

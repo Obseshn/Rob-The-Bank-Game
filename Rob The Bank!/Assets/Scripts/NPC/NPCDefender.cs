@@ -4,7 +4,7 @@ public class NPCDefender : NPCMajor
 {
     private bool isDefenceMode;
 
-    protected override void Surrender()
+    public override void Surrender()
     {
         isDefenceMode = true;
         pathFollower.enabled = false;

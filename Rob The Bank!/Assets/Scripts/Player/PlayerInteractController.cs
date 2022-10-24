@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class PlayerInteractController : MonoBehaviour
 {
-    private float interactCD = 1f;
     [SerializeField] private float interactRadius;
+    [SerializeField] private float surrenderRadius;
     [SerializeField] private Vector3 offset;
-    [SerializeField] private LayerMask NPCLayer;
+    [SerializeField] private Animator animatior;
+    [SerializeField] private PlayerInventory playerInventory;
+
+    private float interactCD = 1f;
     private bool isReadyToInteract = false;
     private PlayerAdditionalControl input;
+
 
     private void Awake()
     {
@@ -28,9 +32,45 @@ public class PlayerInteractController : MonoBehaviour
     {
         StartCoroutine(InteractCDCounter());
         input.PlayerInteraction.Interact.performed += context => OnInteractButtonPressed();
+        input.PlayerInteraction.ShowHideGun.performed += context => OnGunButtonPressed();
     }
 
+    private void OnGunButtonPressed()
+    {
+        if (playerInventory.GetPistolBool())
+        {
+            bool newState = !animatior.GetBool("isGunShowed");
+            if (newState)
+            {
+                animatior.SetTrigger("ShowGun");
+            }
+            else
+            {
+                animatior.SetTrigger("HideGun");
+            }
+            animatior.SetBool("isGunShowed", newState);
+            playerInventory.ShowOrHidePistol(newState);
+        }
+       
+    }
 
+    IEnumerator DurationBetweenNPCSurrenderChecking(float timeInSec)
+    {
+        Collider[] objects = Physics.OverlapSphere(transform.position + offset, surrenderRadius);
+        foreach (var obj in objects)
+        {
+            if (obj.GetComponent<NPCBase>())
+            {
+                obj.GetComponent<NPCIdle>().OnSurrender?.Invoke();
+            }
+        }
+        yield return new WaitForSeconds(timeInSec);
+    }
+
+    private void CheckNPCForSurrender()
+    {
+
+    }
 
     private void OnInteractButtonPressed()
     {

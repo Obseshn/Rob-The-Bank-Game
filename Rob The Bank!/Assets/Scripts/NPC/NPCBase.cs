@@ -14,7 +14,7 @@ public class NPCBase : MonoBehaviour
     {
         Debug.Log(transform.name + " had notified police about robber!!!");
     }
-    protected virtual void Surrender()
+    public virtual void Surrender()
     {
         Debug.Log(transform.name + " had scared and then surrender!");
         isSurrender = true;

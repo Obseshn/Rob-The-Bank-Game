@@ -1,25 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
-public class NPCIdle : MonoBehaviour
+public class NPCIdle : NPCBase
 {
-    [SerializeField] private Animator animator;
-    private int animationsCount;
-    private float minDuration = 10f;
-
+    public Action OnSurrender;
     private void Start()
     {
-        
+        OnSurrender += Surrender;
     }
-
-    IEnumerator RandomDurationBetweenAnimations()
+    public override void Surrender()
     {
-        if (Random.Range(0, 2) == 0) // T or false
-        {
-            yield return new WaitForSeconds(Random.Range(minDuration, minDuration * 3)); // 3 is just a koeff
-        }
-
-        
+        base.Surrender();
     }
 
 }
