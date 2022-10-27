@@ -10,7 +10,6 @@ public class MovementPath : MonoBehaviour
         loop
     }
 
-    [SerializeField] public int[] skipPausePointsNumbers;
     public PathTypes PathType;
     public int movementDirection = 1;
     public int moveingTo = 0; // к какой точке джвигаться

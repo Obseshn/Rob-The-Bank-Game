@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PathFollower), typeof(InteractionChecker), typeof(Animator))]
+[RequireComponent(typeof(EnemyHealth), typeof(EnemyPointer), typeof(Rigidbody))]
 public class NPCMajor : NPCBase
 {
     public Action NPCDeath;
