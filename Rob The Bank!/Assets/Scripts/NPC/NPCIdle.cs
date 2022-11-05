@@ -2,16 +2,20 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+[RequireComponent(typeof(Animator), typeof(CapsuleCollider))]
+
 public class NPCIdle : NPCBase
 {
-    public Action OnSurrender;
+    private Animator animator;
+
     private void Start()
     {
-        OnSurrender += Surrender;
-    }
-    public override void Surrender()
-    {
-        base.Surrender();
+        animator = GetComponent<Animator>();
     }
 
+    public void Surrender()
+    {
+        animator.SetTrigger("Surrender");
+        NPCDeath?.Invoke();
+    }
 }

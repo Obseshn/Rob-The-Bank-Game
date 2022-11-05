@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PathFollower), typeof(InteractionChecker), typeof(Animator))]
-[RequireComponent(typeof(EnemyHealth), typeof(EnemyPointer), typeof(Rigidbody))]
+[RequireComponent(typeof(EnemyPointer), typeof(Rigidbody))]
 public class NPCMajor : NPCBase
 {
-    public Action NPCDeath;
+    
     [SerializeField] private DroppedItem[] objectsToDrop;
     [SerializeField] private GameObject disguiseItem;
 
@@ -14,19 +14,35 @@ public class NPCMajor : NPCBase
     protected PathFollower pathFollower;
     private bool isDeath = false;
 
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         pathFollower = GetComponent<PathFollower>();
         interatorWithPlayer = GetComponent<InteractionChecker>();
-        interatorWithPlayer.InterectWIthPlayerAction += OnInteractWitPlayer;
+        interatorWithPlayer.InteractionStartWithPlayer += OnStartInteractionWithPlayer;
+        interatorWithPlayer.InteractionCompleted += OnInteractWitPlayerCompleted;
     }
 
-    private void OnInteractWitPlayer(Transform player)
+    private void OnStartInteractionWithPlayer(Transform player)
+    {
+        if (!isDeath)
+        {
+            player.GetComponent<PlayerInteractController>().GetAnimator().SetTrigger("Attack");
+
+        }
+        else if(isDeath)
+        {
+            player.GetComponent<PlayerInteractController>().GetAnimator().SetTrigger("Pick Up");
+        }
+    }
+
+    private void OnInteractWitPlayerCompleted(Transform player)
     {
         if (!isDeath)
         {
             Death();
+            animator.SetTrigger("Death");
         }
         else
         {
@@ -37,7 +53,7 @@ public class NPCMajor : NPCBase
     protected override void Death()
     {
         NPCDeath?.Invoke();
-        animator.SetTrigger("Death");
+        
         DropItems();
         pathFollower.enabled = false;
         isDeath = true;
@@ -60,11 +76,6 @@ public class NPCMajor : NPCBase
         }
     }
 
-    public override void Surrender()
-    {
-        pathFollower.enabled = false;
-        base.Surrender();
-    }
 
     protected override void StopSurrender()
     {

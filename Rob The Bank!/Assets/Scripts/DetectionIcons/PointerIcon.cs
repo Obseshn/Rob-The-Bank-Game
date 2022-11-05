@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PointerIcon : MonoBehaviour {
 
-    [SerializeField] Image _image;
+    [SerializeField]Image _image;
     bool _isShown = true;
 
     private void Awake() {
@@ -13,9 +13,14 @@ public class PointerIcon : MonoBehaviour {
         _isShown = false;
     }
 
-    public void SetIconPosition(Vector3 position, Quaternion rotation) {
+    public void SetIconPosition(Vector3 position, Quaternion rotation, float imageAlpha) {
         transform.position = position;
         transform.rotation = rotation;
+        if (imageAlpha > 1)
+        {
+            return;
+        }
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, imageAlpha);
     }
 
     public void Show() {

@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PlayerDetector : MonoBehaviour
 {
-    [SerializeField]private float counter = 0;
-    private int maxDetectionProgress = 4;
-    private bool isPlayerDetected;
+    [SerializeField] private float counter = 0;
+    [SerializeField] private int maxDetectionProgress = 5;
+    public bool isPlayerDetected;
 
-    public void PlayerDetectedState(bool newState)
+    public void ResetCounter()
     {
-        isPlayerDetected = newState;
+        counter = 0;
     }
+
 
     private void Update()
     {
@@ -30,15 +31,8 @@ public class PlayerDetector : MonoBehaviour
         }
     }
 
-    /*    IEnumerator PlayerDetectionProgress(int maxTimeInSec)
-        {
-            float checkRate = 0.5f;
-            counter += checkRate;
-            for (int i = 0; i < maxTimeInSec / checkRate; i++)
-            {
-                yield return new WaitForSeconds(checkRate);
-                counter += checkRate;
-                Physics.Raycast();
-            }
-        }*/
+    public float GetDetectionInPercent()
+    {
+        return counter / maxDetectionProgress;
+    }
 }

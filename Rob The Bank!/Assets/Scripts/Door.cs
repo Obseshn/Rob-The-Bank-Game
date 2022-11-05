@@ -17,10 +17,10 @@ public class Door : MonoBehaviour
     [SerializeField] private InteractionChecker interactor;
     private void Start()
     {
-        interactor.InterectWIthPlayerAction += OnInteractWithPlayer;
+        interactor.InteractionStartWithPlayer += OnInteractWithPlayer;
     }
 
-    private void OpenDoor()
+    public void OpenDoor()
     {
         Debug.Log("Door has been opened!" + "Doortype: " + doorType);
     }

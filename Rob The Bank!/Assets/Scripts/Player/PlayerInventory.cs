@@ -14,6 +14,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private GameObject pistol;
     [SerializeField] private GameObject officerHead;
     [SerializeField] private GameObject defaultHead;
+    [SerializeField] private GameObject bag;
 
     public bool GetBoolStateOfKeyCard()
     {
@@ -38,6 +39,11 @@ public class PlayerInventory : MonoBehaviour
         pistol.SetActive(state);
     }
 
+    public void ShowOrHideBag(bool state)
+    {
+        bag.SetActive(state);
+    }
+
     public void AddItem(DroppedItem item)
     {
         Items pickedItem = item.GetItemName();
@@ -48,8 +54,8 @@ public class PlayerInventory : MonoBehaviour
         if (pickedItem == Items.OfficerWearing)
         {
             hasOfficerWear = true;
-            defaultHead.SetActive(false);
-            officerHead.SetActive(true);
+            /*defaultHead.SetActive(false);
+            officerHead.SetActive(true);*/
         }
         if (pickedItem == Items.Code)
         {

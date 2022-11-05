@@ -9,6 +9,11 @@ public class PlayerInteractController : MonoBehaviour
     [SerializeField] private Animator animatior;
     [SerializeField] private PlayerInventory playerInventory;
 
+    public Animator GetAnimator()
+    {
+       return animatior;
+    }
+
     private float interactCD = 1f;
     private bool isReadyToInteract = false;
     private PlayerAdditionalControl input;
@@ -32,7 +37,13 @@ public class PlayerInteractController : MonoBehaviour
     {
         StartCoroutine(InteractCDCounter());
         input.PlayerInteraction.Interact.performed += context => OnInteractButtonPressed();
+        input.PlayerInteraction.Interact.canceled += ñontext => OnInteractionButtonCanceled();
         input.PlayerInteraction.ShowHideGun.performed += context => OnGunButtonPressed();
+    }
+
+    public bool GetStateOfPistol()
+    {
+        return animatior.GetBool("isGunShowed");
     }
 
     private void OnGunButtonPressed()
@@ -54,7 +65,7 @@ public class PlayerInteractController : MonoBehaviour
        
     }
 
-    IEnumerator DurationBetweenNPCSurrenderChecking(float timeInSec)
+    /*IEnumerator DurationBetweenNPCSurrenderChecking(float timeInSec)
     {
         Collider[] objects = Physics.OverlapSphere(transform.position + offset, surrenderRadius);
         foreach (var obj in objects)
@@ -65,8 +76,12 @@ public class PlayerInteractController : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(timeInSec);
-    }
+    }*/
 
+    public void PickUpAnimation()
+    {
+        animatior.SetTrigger("Pick Up");
+    }
     private void CheckNPCForSurrender()
     {
 
@@ -94,6 +109,17 @@ public class PlayerInteractController : MonoBehaviour
                 Debug.Log("Haven't any interactable object near player!");
             }
         }
+    }
+
+    IEnumerator InteractionProgress(float timeInSec, InteractionChecker interactItem)
+    {
+        yield return new WaitForSeconds(timeInSec);
+        interactItem.InteractWithPlayer(transform);
+    }
+
+    private void OnInteractionButtonCanceled()
+    {
+
     }
 
     private void OnDrawGizmos()

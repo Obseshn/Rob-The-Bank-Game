@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class NPCDoorOpener : MonoBehaviour
 {
-    [SerializeField] private buttonActivateSwivel_gjm controlledDoor;
+    [SerializeField] private ButtonDoor controlledDoor;
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PathFollower>())

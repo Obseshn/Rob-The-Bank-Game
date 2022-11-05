@@ -8,12 +8,6 @@ public class PlayerEnemyChecker : MonoBehaviour
     [SerializeField] private float radius = 1f;
     [SerializeField] private Vector3 offset;
     private SphereCollider sCollider;
-    private bool isOnAttackMode = false;
-
-    public void ChangeAttackMode(bool newState)
-    {
-        isOnAttackMode = newState;
-    }
 
     private void Start()
     {
@@ -21,7 +15,7 @@ public class PlayerEnemyChecker : MonoBehaviour
         sCollider.radius = radius;
         sCollider.isTrigger = true;
         sCollider.center += offset;
-        InvokeRepeating("CheckEnemyInDetectRadius", 5, 5);
+        InvokeRepeating("CheckEnemyInDetectRadius", 5, 2);
     }
 
     private void CheckEnemyInDetectRadius()
@@ -29,7 +23,7 @@ public class PlayerEnemyChecker : MonoBehaviour
         Collider[] enemies = Physics.OverlapSphere(transform.position + offset, radius);
         foreach (var enemy in enemies)
         {
-            if (enemy.GetComponentInChildren<EnemyPointer>())
+            if (enemy.GetComponent<EnemyPointer>())
             {
                 DrawRayToEnemy(enemy.transform);
             }
@@ -52,13 +46,10 @@ public class PlayerEnemyChecker : MonoBehaviour
                 return;
             }
 
-            if (raycastHit.transform.GetComponentInChildren<EnemyPointer>())
+            if (raycastHit.transform.GetComponent<EnemyPointer>())
             {
-                enemy.GetComponentInChildren<EnemyPointer>().isNearToPlayer = true;
-                if (isOnAttackMode)
-                {
-
-                }
+                enemy.GetComponent<EnemyPointer>().isNearToPlayer = true;
+                enemy.GetComponent<PlayerDetector>().isPlayerDetected = true;
                 Debug.Log(enemy.name + " went in enemy checker radius");
             }
         }
@@ -67,9 +58,10 @@ public class PlayerEnemyChecker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponentInChildren<EnemyPointer>())
+        if (other.GetComponent<EnemyPointer>())
         {
-            other.GetComponentInChildren<EnemyPointer>().isNearToPlayer = false;
+            other.GetComponent<EnemyPointer>().isNearToPlayer = false;
+            other.GetComponent<PlayerDetector>().isPlayerDetected = false;
             /*PointerManager.Instance.RemoveFromList(other.GetComponent<EnemyPointer>());*/
             Debug.Log(other.name + " went out of enemy checker radius");
         }

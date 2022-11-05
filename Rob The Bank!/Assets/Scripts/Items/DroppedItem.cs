@@ -16,7 +16,7 @@ public class DroppedItem : MonoBehaviour
     {
         collider = GetComponent<BoxCollider>();
         collider.isTrigger = true;
-        playerInteractor.InterectWIthPlayerAction += OnInteractWithPlayer;
+        playerInteractor.InteractionStartWithPlayer += OnInteractWithPlayer;
     }
 
     public Items GetItemName()
@@ -27,6 +27,7 @@ public class DroppedItem : MonoBehaviour
     private void OnInteractWithPlayer(Transform sender)
     {
         sender.GetComponent<PlayerInventory>().AddItem(GetComponent<DroppedItem>());
+        sender.GetComponent<PlayerInteractController>().PickUpAnimation();
     }
 /*    private void OnTriggerEnter(Collider other)
     {

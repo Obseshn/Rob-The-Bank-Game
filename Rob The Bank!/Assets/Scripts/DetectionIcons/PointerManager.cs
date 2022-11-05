@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
+/*[ExecuteAlways]*/
 public class PointerManager : MonoBehaviour {
 
     [SerializeField] PointerIcon _pointerPrefab;
@@ -18,7 +18,6 @@ public class PointerManager : MonoBehaviour {
             Destroy(this);
         }
     }
-
     public bool CheckInDictionary(EnemyPointer objectToCheck)
     {
         return _dictionary.ContainsKey(objectToCheck);
@@ -27,15 +26,16 @@ public class PointerManager : MonoBehaviour {
     public void AddToList(EnemyPointer enemyPointer) {
         PointerIcon newPointer = Instantiate(_pointerPrefab, transform);
         _dictionary.Add(enemyPointer, newPointer);
+        Debug.Log(enemyPointer.transform.name + " ADDED TO POINTER MANAGER LIST");
     }
 
     public void RemoveFromList(EnemyPointer enemyPointer) {
         Destroy(_dictionary[enemyPointer].gameObject);
         _dictionary.Remove(enemyPointer);
+        
     }
 
     void LateUpdate() {
-
         // Left, Right, Down, Up
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_camera);
 
@@ -69,9 +69,11 @@ public class PointerManager : MonoBehaviour {
             if (enemyPointer.isNearToPlayer)
             {
                 pointerIcon.Show();
+                enemyPointer.GetComponent<Outline>().enabled = true;
             }
             else
             {
+                enemyPointer.GetComponent<Outline>().enabled = false;
                 pointerIcon.Hide();
             }
 
@@ -82,7 +84,7 @@ public class PointerManager : MonoBehaviour {
                 pointerIcon.Hide();
             }*/
 
-            pointerIcon.SetIconPosition(position, rotation);
+            pointerIcon.SetIconPosition(position, rotation, enemyPointer.transform.GetComponent<PlayerDetector>().GetDetectionInPercent());
         }
 
     }

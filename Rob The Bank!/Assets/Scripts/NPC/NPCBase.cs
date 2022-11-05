@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class NPCBase : MonoBehaviour
 {
+    public Action NPCDeath;
     protected bool isSurrender;
     protected virtual void Death()
     {
@@ -13,11 +13,6 @@ public class NPCBase : MonoBehaviour
     protected virtual void NotifyPolice()
     {
         Debug.Log(transform.name + " had notified police about robber!!!");
-    }
-    public virtual void Surrender()
-    {
-        Debug.Log(transform.name + " had scared and then surrender!");
-        isSurrender = true;
     }
 
     protected virtual void StopSurrender()
